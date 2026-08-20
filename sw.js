@@ -1,7 +1,7 @@
 // Agrega al inicio del archivo sw.js
 const API_URL = 'https://iesvilladiego.github.io/plandecentro/';
 
-const CACHE_NAME = 'plan-de-centro-v2.4.0';
+const CACHE_NAME = 'plan-de-centro-v2.5.0';
 const urlsToCache = [
   '/',
   '/index.html',
