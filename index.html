@@ -121,19 +121,68 @@
             position: relative;
             min-height: auto;
             flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
         }
         
         .header-content {
             max-width: var(--container-max-width);
             margin: 0 auto;
-            position: relative;
-            padding-right: calc(var(--touch-target-min) * 3); /* Espacio para panel usuario */
+            width: 100%;
+            text-align: center;
         }
         
-        @media (max-width: 768px) {
+        /* Desktop: Layout horizontal - título a la izquierda, panel a la derecha */
+        @media (min-width: 769px) {
+            header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                padding: clamp(1.2rem, 3vw, 2rem) clamp(2rem, 5vw, 3rem);
+                gap: 1.5rem;
+            }
+            
             .header-content {
-                padding-right: 1rem;
-                padding-bottom: 4rem; /* Espacio para panel usuario posicionado abajo */
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                min-width: 0;
+            }
+            
+            .user-panel {
+                position: relative;
+                top: auto;
+                right: auto;
+                width: auto;
+                max-width: none;
+                margin-top: 0;
+                padding: 0;
+                justify-content: flex-end;
+                flex-shrink: 0;
+            }
+        }
+        
+        /* Móvil: Layout vertical - título arriba, panel abajo */
+        @media (max-width: 768px) {
+            header {
+                padding: clamp(0.8rem, 2.5vw, 1.5rem) clamp(0.8rem, 3vw, 1.5rem);
+                gap: 0.6rem;
+            }
+            
+            .user-panel {
+                width: auto;
+                max-width: calc(100% - 1rem);
+                padding: 0.4rem 0.8rem;
+                margin-top: 0.3rem;
+                background-color: rgba(255, 255, 255, 0.12);
+                border-radius: var(--border-radius-md);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
             }
         }
         
@@ -201,28 +250,13 @@
         
         /* Panel de info de usuario */
         .user-panel {
-            position: absolute;
-            top: 1rem;
-            right: 1.5rem;
             display: flex;
             align-items: center;
             gap: clamp(0.5rem, 1.5vw, 1rem);
             flex-wrap: nowrap;
             z-index: 100;
-        }
-
-        @media (max-width: 768px) {
-            .user-panel {
-                position: absolute;
-                bottom: 0.5rem;
-                right: 50%;
-                transform: translateX(50%);
-                top: auto;
-                flex-wrap: wrap;
-                justify-content: center;
-                width: calc(100% - 2rem);
-                max-width: 400px;
-            }
+            position: relative;
+            justify-content: center;
         }
 
         .user-info {
@@ -1745,7 +1779,6 @@
                 flex-direction: row;
                 flex-wrap: wrap;
                 gap: 0.4rem;
-                bottom: 0.3rem;
             }
             
             .user-info {
@@ -2225,15 +2258,15 @@
                     </button>
                 </span>
             </p>
-            <div class="user-panel" id="userPanel" style="display: none;">
-                <div class="user-info">
-                    <div class="user-avatar" id="userAvatar">U</div>
-                    <span id="userName">Usuario</span>
-                    <span class="user-role-badge" id="userRole">Rol</span>
-                </div>
-                <button type="button" class="admin-panel-btn" id="backupBtn" style="display: none;" title="Copias de Seguridad">💾 Backup</button>
-                <button type="button" class="logout-btn" id="logoutBtn">Cerrar Sesión</button>
+        </div>
+        <div class="user-panel" id="userPanel" style="display: none;">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <span id="userName">Usuario</span>
+                <span class="user-role-badge" id="userRole">Rol</span>
             </div>
+            <button type="button" class="admin-panel-btn" id="backupBtn" style="display: none;" title="Copias de Seguridad">💾 Backup</button>
+            <button type="button" class="logout-btn" id="logoutBtn">Cerrar Sesión</button>
         </div>
     </header>
     
