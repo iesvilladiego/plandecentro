@@ -2,12 +2,13 @@
   "name": "Plan de Centro - IES Virgen de Villadiego",
   "short_name": "Plan de Centro",
   "description": "Aplicación del Plan de Centro del IES Virgen de Villadiego",
-  "start_url": "/PlanDeCentro/",
+  "id": "./",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#1a4b8c",
   "theme_color": "#1a4b8c",
   "orientation": "portrait-primary",
-  "scope": "/PlanDeCentro/",
+  "scope": "./",
   "icons": [
     {
       "src": "icons/icon-72x72.png",
