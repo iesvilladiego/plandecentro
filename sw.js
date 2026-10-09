@@ -1,5 +1,4 @@
-// Agrega al inicio del archivo sw.js
-const API_URL = 'https://iesvilladiego.github.io/plandecentro/';
+// sw.js - Service Worker de la PWA Plan de Centro
 
 const CACHE_NAME = 'plan-de-centro-v2.5.1';
 
@@ -46,8 +45,6 @@ self.addEventListener('activate', event => {
           version: APP_VERSION
         });
       });
-      // Verificamos si hay nueva versión disponible nada más activar.
-      checkForUpdates();
     })
   );
 });
