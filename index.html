@@ -2255,6 +2255,182 @@
             gap: 1rem;
             margin-top: 1.5rem;
         }
+
+        /* === Safe-area-inset (notch / iPhone X+ / PWA standalone) === */
+        header {
+            padding-top: max(clamp(1rem, 3vw, 2rem), env(safe-area-inset-top));
+            padding-left: max(clamp(1rem, 5vw, 2rem), env(safe-area-inset-left));
+            padding-right: max(clamp(1rem, 5vw, 2rem), env(safe-area-inset-right));
+        }
+
+        footer {
+            padding-bottom: max(clamp(1rem, 3vw, 2rem), env(safe-area-inset-bottom));
+            padding-left: max(clamp(1rem, 5vw, 2rem), env(safe-area-inset-left));
+            padding-right: max(clamp(1rem, 5vw, 2rem), env(safe-area-inset-right));
+        }
+
+        /* === Header sticky para acceso siempre visible a chips y panel === */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        /* === Body scroll lock cuando hay modal abierto === */
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        /* === Chip de versión: estado "actualización disponible" === */
+        .app-version-chip {
+            transition: background-color var(--transition-normal),
+                        color var(--transition-normal),
+                        border-color var(--transition-normal),
+                        transform var(--transition-normal),
+                        box-shadow var(--transition-normal);
+        }
+
+        .app-version-chip.update-available {
+            background-color: rgba(255, 193, 7, 0.28);
+            border-color: rgba(255, 193, 7, 0.75);
+            color: #fff8e1;
+            cursor: pointer;
+            animation: chipPulse 1.8s ease-in-out infinite;
+        }
+
+        .app-version-chip.update-available::before {
+            color: #ffb300;
+            text-shadow: 0 0 8px rgba(255, 179, 0, 0.85);
+        }
+
+        .app-version-chip.update-available:hover {
+            background-color: rgba(255, 193, 7, 0.45);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(255, 193, 7, 0.45);
+        }
+
+        .app-version-chip.update-available:focus-visible {
+            outline-color: #ffb300;
+        }
+
+        .app-version-chip .chip-arrow {
+            margin: 0 0.25rem;
+            opacity: 0.85;
+            font-weight: 700;
+        }
+
+        .app-version-chip .chip-new-version {
+            font-weight: 800;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        @keyframes chipPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.55); }
+            50%      { box-shadow: 0 0 0 6px rgba(255, 193, 7, 0); }
+        }
+
+        /* === Botón Instalar app (PWA multiplataforma) === */
+        .install-btn {
+            background-color: rgba(40, 167, 69, 0.85);
+            border: 1px solid rgba(40, 167, 69, 0.4);
+            color: white;
+            padding: clamp(0.4rem, 1vw, 0.55rem) clamp(0.6rem, 2vw, 1rem);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: clamp(0.72rem, 1.5vw, 0.88rem);
+            font-weight: 600;
+            transition: all var(--transition-normal);
+            min-height: var(--touch-target-min);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            gap: 0.3rem;
+        }
+
+        .install-btn.visible {
+            display: inline-flex;
+        }
+
+        .install-btn:hover {
+            background-color: var(--success-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* === Nav-tabs con scroll horizontal en móvil === */
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                overflow-y: hidden;
+                -webkit-overflow-scrolling: touch;
+                scroll-snap-type: x mandatory;
+                justify-content: flex-start;
+                scrollbar-width: thin;
+                scrollbar-color: var(--secondary-color) transparent;
+                padding: 0.5rem;
+                background-color: rgba(255, 255, 255, 0.5);
+                border-radius: var(--border-radius-lg);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+            }
+
+            .nav-tabs::-webkit-scrollbar { height: 6px; }
+            .nav-tabs::-webkit-scrollbar-thumb {
+                background: var(--secondary-color);
+                border-radius: 3px;
+            }
+
+            .tab-btn {
+                flex-shrink: 0;
+                scroll-snap-align: start;
+                width: auto;
+                max-width: 70vw;
+                white-space: nowrap;
+            }
+        }
+
+        /* === Modales full-screen en pantallas muy pequeñas === */
+        @media (max-width: 480px) {
+            .mode-overlay,
+            .login-overlay,
+            .etiqueta-edit-overlay,
+            .section-title-edit-overlay,
+            .confirm-overlay,
+            .help-overlay {
+                padding: 0;
+                align-items: stretch;
+            }
+
+            .mode-modal,
+            .login-modal,
+            .etiqueta-edit-modal,
+            .section-title-edit-modal,
+            .confirm-dialog,
+            .help-modal {
+                max-height: 100vh;
+                height: 100%;
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+                border-radius: 0;
+                padding: calc(1rem + env(safe-area-inset-top)) 1rem calc(1rem + env(safe-area-inset-bottom));
+            }
+        }
+
+        /* === Standalone PWA: padding inferior extra para home indicator === */
+        @media all and (display-mode: standalone) {
+            body {
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+            .container {
+                padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+            }
+        }
     </style>
 </head>
 <body>
@@ -2267,13 +2443,13 @@
             </div>
             <div class="mode-options">
                 <div class="mode-option direct" id="directAccessBtn">
-                    <button type="button" class="mode-help-btn" id="directHelpBtn" title="Ayuda para Acceso Directo">?</button>
+                    <button type="button" class="mode-help-btn" id="directHelpBtn" title="Ayuda para Acceso Directo" aria-label="Ayuda para Acceso Directo">?</button>
                     <div class="mode-option-icon">👁️</div>
                     <div class="mode-option-title">Acceso Directo</div>
                     <div class="mode-option-desc">Accede inmediatamente al contenido del Plan de Centro en modo solo lectura. No requiere autenticación.</div>
                 </div>
                 <div class="mode-option edit" id="editAccessBtn">
-                    <button type="button" class="mode-help-btn" id="editHelpBtn" title="Ayuda para modo Edición">?</button>
+                    <button type="button" class="mode-help-btn" id="editHelpBtn" title="Ayuda para modo Edición" aria-label="Ayuda para modo Edición">?</button>
                     <div class="mode-option-icon">✏️</div>
                     <div class="mode-option-title">Edición</div>
                     <div class="mode-option-desc">Accede con permisos de administrador para poder modificar contenidos y gestionar usuarios.</div>
@@ -2455,7 +2631,7 @@
         <div class="header-content">
             <div class="title-row">
                 <h1 id="appTitle" title="Click para editar (admin)">Plan de Centro - IES Virgen de Villadiego</h1>
-                <span class="app-version-chip" id="versionChip" title="Versión viva obtenida del Service Worker">v?</span>
+                <span class="app-version-chip" id="versionChip" role="status" aria-live="polite" title="Versión viva obtenida del Service Worker">v?</span>
                 <span class="course-chip">
                     <span class="year-text" id="yearDisplay">Curso 2025-2026</span>
                 </span>
@@ -2468,9 +2644,12 @@
                 <span id="userName">Usuario</span>
                 <span class="user-role-badge" id="userRole">Rol</span>
             </div>
-            <button type="button" class="help-btn" id="helpBtn" title="Ayuda contextual">?</button>
-            <button type="button" class="admin-panel-btn" id="backupBtn" style="display: none;" title="Copias de Seguridad">💾 Backup</button>
-            <button type="button" class="logout-btn" id="logoutBtn">Cerrar Sesión</button>
+                    <button type="button" class="install-btn" id="installBtn" title="Instalar como aplicación" aria-label="Instalar como aplicación">
+            ⬇️ Instalar
+        </button>
+        <button type="button" class="help-btn" id="helpBtn" title="Ayuda contextual" aria-label="Ayuda contextual">?</button>
+            <button type="button" class="admin-panel-btn" id="backupBtn" style="display: none;" title="Copias de Seguridad" aria-label="Copias de seguridad">💾 Backup</button>
+            <button type="button" class="logout-btn" id="logoutBtn" aria-label="Cerrar sesión">Cerrar Sesión</button>
         </div>
     </header>
     
@@ -3642,28 +3821,121 @@
             generarBotonesApartados();
         });
         // ============================================
-        // VERSIÓN VIVA DE LA APP (obtenida del SW)
+        // VERSIÓN VIVA DE LA APP + INDICADOR DE ACTUALIZACIÓN
         // ============================================
+        let currentAppVersion = null;
+        let pendingNewVersion = null;
+
         function setAppVersion(version) {
             const chip = document.getElementById('versionChip');
             if (!chip) return;
             const v = (version || '').trim();
+            currentAppVersion = v || null;
+            // Si hay una actualización pendiente, NO sobrescribimos el indicador.
+            if (chip.classList.contains('update-available')) return;
             chip.textContent = v ? v : 'v?';
             chip.title = v
                 ? ('Versión actual: ' + v + ' (obtenida del Service Worker)')
                 : 'No se pudo obtener la versión del Service Worker';
+            chip.setAttribute('aria-label', chip.title);
         }
+
+        function setUpdateAvailable(newVersion) {
+            const chip = document.getElementById('versionChip');
+            if (!chip) return;
+            pendingNewVersion = newVersion || null;
+            chip.classList.add('update-available');
+            if (newVersion && currentAppVersion && newVersion !== currentAppVersion) {
+                chip.innerHTML = '<span class="chip-new-version">' + currentAppVersion + '</span>'
+                    + ' <span class="chip-arrow">→</span> '
+                    + '<span class="chip-new-version">' + newVersion + '</span>';
+                chip.title = 'Nueva versión disponible: ' + newVersion + '. Haz clic para actualizar.';
+            } else if (newVersion) {
+                chip.innerHTML = '<span class="chip-arrow">↑</span> ' + newVersion;
+                chip.title = 'Nueva versión disponible: ' + newVersion + '. Haz clic para actualizar.';
+            } else {
+                chip.title = 'Hay una nueva versión disponible. Haz clic para actualizar.';
+            }
+            chip.setAttribute('aria-label', chip.title);
+            // Aviso no intrusivo
+            showNotification('⬆️ Nueva versión disponible. Clic en el chip para actualizar.', 'info');
+        }
+
+        async function triggerUpdate() {
+            try {
+                if (!navigator.serviceWorker) return;
+                const registration = await navigator.serviceWorker.getRegistration();
+                if (!registration) {
+                    window.location.reload();
+                    return;
+                }
+                if (registration.waiting) {
+                    // SW nuevo ya instalado y esperando: lo activamos.
+                    registration.waiting.postMessage({ action: 'SKIP_WAITING' });
+                } else {
+                    // Forzamos la comprobación de actualizaciones; si hay SW nuevo,
+                    // se instalará y pasará a "waiting", tras lo cual podremos activarlo.
+                    await registration.update();
+                    showNotification('⏳ Buscando actualización…', 'info');
+                }
+            } catch (e) {
+                console.error('Error al activar la actualización:', e);
+                showNotification('No se pudo activar la actualización. Recarga la página.', 'error');
+            }
+        }
+
+        // Click en el chip de versión: si hay actualización, lanza el flujo.
+        document.getElementById('versionChip').addEventListener('click', function() {
+            if (this.classList.contains('update-available')) {
+                triggerUpdate();
+            }
+        });
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.addEventListener('message', event => {
-                if (event.data && event.data.type === 'VERSION_INFO' && event.data.version) {
-                    setAppVersion(event.data.version);
+                const data = event.data || {};
+                if (data.type === 'VERSION_INFO' && data.version) {
+                    setAppVersion(data.version);
+                } else if (data.type === 'NEW_VERSION_FOUND') {
+                    setUpdateAvailable(data.newVersion || data.version);
                 }
             });
 
             if (navigator.serviceWorker.controller) {
                 navigator.serviceWorker.controller.postMessage({ action: 'GET_VERSION' });
             }
+
+            // Flujo estándar PWA: detectar SW nuevo instalado en estado "waiting".
+            navigator.serviceWorker.ready.then(registration => {
+                registration.addEventListener('updatefound', () => {
+                    const installing = registration.installing;
+                    if (!installing) return;
+                    installing.addEventListener('statechange', () => {
+                        if (installing.state === 'installed' && navigator.serviceWorker.controller) {
+                            setUpdateAvailable(null);
+                        }
+                    });
+                });
+
+                // Revisa si ya hay un SW esperando al cargar.
+                if (registration.waiting) {
+                    setUpdateAvailable(null);
+                }
+
+                // Comprobación periódica de actualizaciones (cada hora).
+                setInterval(() => registration.update().catch(() => {}), 60 * 60 * 1000);
+                // Y también al volver a la pestaña.
+                document.addEventListener('visibilitychange', () => {
+                    if (document.visibilityState === 'visible') {
+                        registration.update().catch(() => {});
+                    }
+                });
+            });
+
+            // Cuando el nuevo SW toma el control, recargamos.
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                window.location.reload();
+            });
         }
 
         async function loadAppVersionFromFetch() {
@@ -3761,6 +4033,37 @@
                 }
             }
         });
+
+        // ============================================
+        // BODY SCROLL LOCK automático al abrir cualquier modal
+        // ============================================
+        const MODAL_LOCK_SELECTORS = [
+            '.mode-overlay',
+            '.login-overlay',
+            '.etiqueta-edit-overlay',
+            '.confirm-overlay',
+            '.section-title-edit-overlay',
+            '.help-overlay',
+            '#backupOverlay'
+        ];
+
+        function updateBodyScrollLock() {
+            const anyVisible = Array.from(
+                document.querySelectorAll(MODAL_LOCK_SELECTORS.join(', '))
+            ).some(el => !el.classList.contains('hidden'));
+            document.body.classList.toggle('modal-open', anyVisible);
+        }
+
+        // Observamos cambios de clase en cada modal para activar/desactivar el lock.
+        // Se monta tras DOMContentLoaded para asegurar que los modales existen.
+        document.addEventListener('DOMContentLoaded', () => {
+            const modalEls = document.querySelectorAll(MODAL_LOCK_SELECTORS.join(', '));
+            const observer = new MutationObserver(updateBodyScrollLock);
+            modalEls.forEach(el => {
+                observer.observe(el, { attributes: true, attributeFilter: ['class'] });
+            });
+            updateBodyScrollLock();
+        });
     </script>
                 <script>
           // Registrar Service Worker
@@ -3776,25 +4079,36 @@
                 });
           }
 
-          // Detectar cambios y actualizar
-          let newWorker;
-          function showUpdateBar() {
-                if (confirm('Hay una nueva versión disponible. ¿Deseas actualizar?')) {
-                  newWorker.postMessage({ action: 'skipWaiting' });
-                }
-          }
+          // PWA install prompt (multiplataforma: Chrome/Edge/Android/Samsung)
+          let deferredInstallPrompt = null;
+          window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredInstallPrompt = e;
+                const btn = document.getElementById('installBtn');
+                if (btn) btn.classList.add('visible');
+          });
 
-          navigator.serviceWorker.addEventListener('controllerchange', () => {
-                window.location.reload();
+          window.addEventListener('appinstalled', () => {
+                const btn = document.getElementById('installBtn');
+                if (btn) btn.classList.remove('visible');
+                deferredInstallPrompt = null;
+                showNotification('\u2713 App instalada. Puedes abrirla desde tu pantalla de inicio.', 'success');
           });
 
           if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.addEventListener('message', event => {
-                  if (event.data && event.data.type === 'NEW_VERSION_FOUND') {
-                        newWorker = event.data.worker;
-                        showUpdateBar();
-                  }
-                });
+                const installBtn = document.getElementById('installBtn');
+                if (installBtn) {
+                      installBtn.addEventListener('click', async () => {
+                            if (!deferredInstallPrompt) return;
+                            deferredInstallPrompt.prompt();
+                            const choice = await deferredInstallPrompt.userChoice;
+                            if (choice.outcome === 'accepted') {
+                                  showNotification('\u2b07\ufe0f Instalando aplicación…', 'info');
+                            }
+                            deferredInstallPrompt = null;
+                            installBtn.classList.remove('visible');
+                      });
+                }
           }
         </script>
 </body>
