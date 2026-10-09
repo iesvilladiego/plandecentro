@@ -215,38 +215,7 @@
             cursor: default;
         }
 
-        .year-text.editable {
-            cursor: pointer;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
-        }
 
-        .year-text.editable:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .edit-year-btn {
-            background-color: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-            display: none;
-        }
-
-        .edit-year-btn:hover {
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .edit-year-btn.visible {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
         
         /* Panel de info de usuario */
         .user-panel {
@@ -2109,40 +2078,6 @@
             cursor: default;
         }
 
-        .course-chip .year-text.editable {
-            cursor: pointer;
-        }
-
-        .course-chip .year-text.editable:hover {
-            background-color: transparent;
-            text-decoration: underline;
-            text-underline-offset: 3px;
-        }
-
-        .course-chip .edit-year-btn {
-            background-color: rgba(255, 255, 255, 0.22);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            color: #fff;
-            padding: 0.15rem 0.5rem;
-            border-radius: 999px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 600;
-            transition: all var(--transition-normal);
-            display: none;
-            line-height: 1;
-        }
-
-        .course-chip .edit-year-btn:hover {
-            background-color: rgba(255, 255, 255, 0.35);
-        }
-
-        .course-chip .edit-year-btn.visible {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
-        }
-
         .header-content p {
             margin: 0;
         }
@@ -2341,7 +2276,7 @@
                     <button type="button" class="mode-help-btn" id="editHelpBtn" title="Ayuda para modo Edición">?</button>
                     <div class="mode-option-icon">✏️</div>
                     <div class="mode-option-title">Edición</div>
-                    <div class="mode-option-desc">Accede con permisos de administrador para poder modificar contenidos, gestionar usuarios y cambiar el año escolar.</div>
+                    <div class="mode-option-desc">Accede con permisos de administrador para poder modificar contenidos y gestionar usuarios.</div>
                 </div>
             </div>
         </div>
@@ -2368,33 +2303,6 @@
                     <input type="password" id="password" placeholder="Introduce tu contraseña" required autocomplete="current-password">
                 </div>
                 <button type="submit" class="login-btn">Acceder como Administrador</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL DE CAMBIO DE AÑO -->
-    <div id="yearModalOverlay" class="year-modal-overlay hidden">
-        <div class="year-modal">
-            <div class="year-modal-header">
-                <h3>📅 Cambiar Curso Escolar</h3>
-                <button type="button" class="close-modal-btn" id="closeYearModal">&times;</button>
-            </div>
-            <form class="year-form" id="yearForm">
-                <div class="form-group">
-                    <label>Año de inicio del curso:</label>
-                    <div class="year-input-group">
-                        <input type="number" id="yearStart" min="2000" max="2099" value="2025">
-                        <span>-</span>
-                        <input type="number" id="yearEnd" min="2000" max="2099" value="2026" readonly style="background-color: #e9ecef;">
-                    </div>
-                </div>
-                <div class="year-preview">
-                    Vista previa: <span id="yearPreviewText">Curso 2025-2026</span>
-                </div>
-                <div class="year-buttons">
-                    <button type="button" class="cancel-year-btn" id="cancelYearBtn">Cancelar</button>
-                    <button type="submit" class="save-year-btn">Guardar Cambios</button>
-                </div>
             </form>
         </div>
     </div>
@@ -2550,9 +2458,6 @@
                 <span class="app-version-chip" id="versionChip" title="Versión viva obtenida del Service Worker">v?</span>
                 <span class="course-chip">
                     <span class="year-text" id="yearDisplay">Curso 2025-2026</span>
-                    <button type="button" class="edit-year-btn" id="editYearBtn" title="Cambiar año escolar">
-                        ✏️ Cambiar año
-                    </button>
                 </span>
             </div>
             <p style="display: none;"></p>
@@ -2732,9 +2637,7 @@
         // Cargar datos desde Firebase
         function loadFromFirebase() {
             // Año: se calcula automáticamente (1 sept – 31 ago).
-            // No se carga desde Firebase para que siempre refleje la fecha actual.
-            // Persistimos en Firebase únicamente para sincronizar entre dispositivos.
-            database.ref('config/year').set(currentYear);
+            // No se carga ni se persiste en Firebase: siempre refleja la fecha del sistema.
             updateYearDisplay();
 
             // Cargar contenido
@@ -2778,11 +2681,6 @@
             } catch (error) {
                 console.error('Error inicializando admin:', error);
             }
-        }
-
-        // Guardar año en Firebase
-        function saveYearToFirebase() {
-            database.ref('config/year').set(currentYear);
         }
 
         // Guardar contenido en Firebase
@@ -2874,15 +2772,13 @@
         // FUNCIONES DE UI
         // ============================================
 
-        // Actualizar visualización del año
+        // Actualizar visualización del año (auto-calculado, sin modal)
         function updateYearDisplay() {
             const yearText = `Curso ${currentYear.start}-${currentYear.end}`;
-            document.getElementById('yearDisplay').textContent = yearText;
-            document.getElementById('yearPreviewText').textContent = yearText;
-            document.getElementById('footerText').textContent = appContent.footer.replace('{year}', currentYear.start);
-            
-            document.getElementById('yearStart').value = currentYear.start;
-            document.getElementById('yearEnd').value = currentYear.end;
+            const yearDisplayEl = document.getElementById('yearDisplay');
+            if (yearDisplayEl) yearDisplayEl.textContent = yearText;
+            const footerTextEl = document.getElementById('footerText');
+            if (footerTextEl) footerTextEl.textContent = appContent.footer.replace('{year}', currentYear.start);
         }
 
         // Actualizar visualización del contenido
@@ -2943,7 +2839,6 @@
             localStorage.removeItem('planCentro_session');
             showModeSelection();
             hideUserPanel();
-            hideEditYearButton();
             // IMPORTANTE: Desactivar modo edición completo
             setupSectionTitleEditing(); // Quitar clase editable de títulos
             generarBotonesApartados(); // Regenerar botones como usuario normal
@@ -2956,11 +2851,9 @@
             showUserPanel();
             
             if (currentUser.role === 'admin') {
-                showEditYearButton();
                 document.getElementById('backupBtn').style.display = 'inline-flex';
                 setupSectionTitleEditing(); // Activar edición de títulos de sección
             } else {
-                hideEditYearButton();
                 document.getElementById('backupBtn').style.display = 'none';
                 setupSectionTitleEditing(); // Desactivar edición de títulos de sección
             }
@@ -2980,16 +2873,6 @@
 
         function hideUserPanel() {
             document.getElementById('userPanel').style.display = 'none';
-        }
-
-        function showEditYearButton() {
-            document.getElementById('editYearBtn').classList.add('visible');
-            document.getElementById('yearDisplay').classList.add('editable');
-        }
-
-        function hideEditYearButton() {
-            document.getElementById('editYearBtn').classList.remove('visible');
-            document.getElementById('yearDisplay').classList.remove('editable');
         }
 
         // Modales
@@ -3012,16 +2895,6 @@
             document.getElementById('loginOverlay').classList.add('hidden');
             document.getElementById('loginError').classList.remove('visible');
             document.getElementById('loginForm').reset();
-        }
-
-        function showYearModal() {
-            document.getElementById('yearModalOverlay').classList.remove('hidden');
-            document.getElementById('yearStart').focus();
-        }
-
-        function hideYearModal() {
-            document.getElementById('yearModalOverlay').classList.add('hidden');
-            updateYearDisplay();
         }
 
 
@@ -3364,16 +3237,15 @@
                 }
 
                 const backupData = snapshot.val();
-                const { year, content, apartados: backupApartados } = backupData.data;
+                const { content, apartados: backupApartados } = backupData.data;
 
-                // Restaurar datos en memoria
-                currentYear = year;
+                // El año NO se restaura: se sigue calculando automáticamente
+                // (1 sept – 31 ago) a partir de la fecha del sistema.
                 appContent = content;
                 apartados = backupApartados;
 
                 // Guardar en Firebase
                 await Promise.all([
-                    database.ref('config/year').set(year),
                     database.ref('config/content').set(content),
                     database.ref('apartados').set(backupApartados)
                 ]);
@@ -3577,43 +3449,6 @@
         document.getElementById('createBackupBtn').addEventListener('click', createBackup);
         document.getElementById('refreshBackupsBtn').addEventListener('click', loadBackupsList);
 
-        // Editar año
-        document.getElementById('editYearBtn').addEventListener('click', showYearModal);
-        document.getElementById('yearDisplay').addEventListener('click', function() {
-            if (currentUser && currentUser.role === 'admin') {
-                showYearModal();
-            }
-        });
-
-        // Cerrar modal año
-        document.getElementById('closeYearModal').addEventListener('click', hideYearModal);
-        document.getElementById('cancelYearBtn').addEventListener('click', hideYearModal);
-
-        // Input año
-        document.getElementById('yearStart').addEventListener('input', function(e) {
-            const startYear = parseInt(e.target.value) || 2025;
-            document.getElementById('yearEnd').value = startYear + 1;
-            document.getElementById('yearPreviewText').textContent = `Curso ${startYear}-${startYear + 1}`;
-        });
-
-        // Guardar año
-        document.getElementById('yearForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const startYear = parseInt(document.getElementById('yearStart').value);
-            
-            if (startYear >= 2000 && startYear <= 2099) {
-                currentYear.start = startYear;
-                currentYear.end = startYear + 1;
-                // Persistimos por consistencia, pero al recargar se vuelve
-                // a calcular automáticamente según la fecha del sistema.
-                saveYearToFirebase();
-                updateYearDisplay();
-                hideYearModal();
-                showNotification('✓ Año escolar actualizado. Se recuperará automáticamente al recargar.', 'success');
-            } else {
-                alert('Por favor, introduce un año válido (entre 2000 y 2099)');
-            }
-        });
 
         // Editar etiqueta
         document.getElementById('editEtiquetaForm').addEventListener('submit', saveEtiquetaChanges);
@@ -3648,10 +3483,6 @@
         });
 
         // Click en overlays para cerrar
-        document.getElementById('yearModalOverlay').addEventListener('click', function(e) {
-            if (e.target === this) hideYearModal();
-        });
-
         document.getElementById('etiquetaEditOverlay').addEventListener('click', function(e) {
             if (e.target === this) closeEditEtiqueta();
         });
@@ -3677,8 +3508,6 @@
                     closeBackupModal();
                 } else if (!document.getElementById('sectionTitleEditOverlay').classList.contains('hidden')) {
                     closeEditSectionTitle();
-                } else if (!document.getElementById('yearModalOverlay').classList.contains('hidden')) {
-                    hideYearModal();
                 } else if (!document.getElementById('loginOverlay').classList.contains('hidden')) {
                     showModeSelection();
                 }
@@ -3884,8 +3713,8 @@
                     '<li><strong>Añadir etiquetas:</strong> usa el botón <kbd>+</kbd> al final de cada sección.</li>' +
                     '<li><strong>Eliminar etiquetas:</strong> pulsa el <kbd>×</kbd> en la esquina de cada apartado.</li>' +
                     '<li><strong>Editar títulos:</strong> haz clic en el título de la app o de cualquier sección para renombrarla.</li>' +
-                    '<li><strong>Cambiar curso:</strong> usa <kbd>✏️ Cambiar año</kbd> dentro del chip del curso. ' +
-                    'El cambio es <em>temporal</em>: al recargar, la app recalcula el curso actual (1 sept – 31 ago).</li>' +
+                    '<li><strong>Curso actual:</strong> se muestra en el chip junto al título y se recalcula solo ' +
+                    'cada vez que se carga la página (1 sept – 31 ago). No requiere acción manual.</li>' +
                     '<li><strong>Copias de seguridad:</strong> con <kbd>💾 Backup</kbd> puedes crear y restaurar snapshots.</li>' +
                     '</ul>' +
                     '<div class="help-warn"><strong>⚠️ Cuidado:</strong> restaurar una copia de seguridad reemplaza TODOS los ' +
