@@ -950,108 +950,6 @@
             75% { transform: translateX(10px); }
         }
 
-        /* ===== MODAL DE CAMBIO DE AÑO ===== */
-        .year-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9998;
-            backdrop-filter: blur(5px);
-        }
-
-        .year-modal-overlay.hidden {
-            display: none;
-        }
-
-        .year-modal {
-            background: white;
-            padding: 2rem;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 450px;
-            width: 90%;
-            max-height: 85vh;
-            overflow-y: auto;
-        }
-
-        .year-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        .year-modal-header h3 {
-            color: var(--primary-color);
-            font-size: 1.4rem;
-        }
-
-        .close-modal-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #888;
-            transition: color 0.3s ease;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
-
-        .close-modal-btn:hover {
-            background-color: #f0f0f0;
-            color: var(--accent-color);
-        }
-
-        .year-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-        }
-
-        .year-input-group {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1.2rem;
-        }
-
-        .year-input-group input {
-            width: 90px;
-            padding: 0.7rem;
-            border: 2px solid var(--secondary-color);
-            border-radius: 8px;
-            font-size: 1.1rem;
-            text-align: center;
-            font-weight: 600;
-        }
-
-        .year-input-group input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 10px rgba(26, 75, 140, 0.2);
-        }
-
-        .year-preview {
-            background-color: var(--light-color);
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--primary-color);
-        }
 
         .save-year-btn {
             padding: 0.9rem;
@@ -1086,98 +984,7 @@
             background-color: #5a6268;
         }
 
-        .year-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 0.5rem;
-        }
-
-        /* ===== PANEL DE ADMINISTRACIÓN ===== */
-        .admin-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9997;
-            backdrop-filter: blur(5px);
-        }
-
-        .admin-overlay.hidden {
-            display: none;
-        }
-
-        .admin-panel {
-            background: white;
-            padding: 2rem;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 800px;
-            width: 95%;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .admin-panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        .admin-panel-header h3 {
-            color: var(--primary-color);
-            font-size: 1.5rem;
-        }
-
-        .admin-tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .admin-tab-btn {
-            padding: 0.7rem 1.2rem;
-            background-color: #e9ecef;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            color: var(--dark-color);
-        }
-
-        .admin-tab-btn:hover {
-            background-color: #dee2e6;
-        }
-
-        .admin-tab-btn.active {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .admin-section {
-            display: none;
-        }
-
-        .admin-section.active {
-            display: block;
-        }
-
-        /* Gestión de usuarios */
-        .user-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
+        /* === Estilos para la lista de backups (reutiliza user-item) === */
 
         .user-item {
             display: flex;
@@ -1249,131 +1056,6 @@
             background-color: #c1121f;
         }
 
-        .add-user-form {
-            background-color: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 2px dashed #dee2e6;
-        }
-
-        .add-user-form h4 {
-            margin-bottom: 1rem;
-            color: var(--primary-color);
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .form-row.single {
-            grid-template-columns: 1fr;
-        }
-
-        .form-row input {
-            padding: 0.8rem;
-            border: 2px solid #dee2e6;
-            border-radius: 8px;
-            font-size: 0.95rem;
-        }
-
-        .form-row input:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-        }
-
-        .btn-add-user {
-            padding: 0.8rem 1.5rem;
-            background-color: var(--success-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .btn-add-user:hover {
-            background-color: #218838;
-        }
-
-        /* Cambiar contraseña propia */
-        .change-password-section {
-            background-color: #fff3cd;
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin-top: 1.5rem;
-        }
-
-        .change-password-section h4 {
-            color: #856404;
-            margin-bottom: 1rem;
-        }
-
-        .btn-change-password {
-            padding: 0.8rem 1.5rem;
-            background-color: var(--warning-color);
-            color: #212529;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .btn-change-password:hover {
-            background-color: #e0a800;
-        }
-
-        /* Edición de contenido */
-        .editable-content-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .editable-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            background-color: var(--light-color);
-            border-radius: 8px;
-        }
-
-        .editable-label {
-            font-weight: 600;
-            color: var(--primary-color);
-            min-width: 150px;
-        }
-
-        .editable-input {
-            flex: 1;
-            padding: 0.7rem;
-            border: 2px solid #dee2e6;
-            border-radius: 6px;
-            font-size: 0.95rem;
-        }
-
-        .editable-input:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-        }
-
-        .btn-save-content {
-            padding: 0.6rem 1.2rem;
-            background-color: var(--success-color);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .btn-save-content:hover {
-            background-color: #218838;
-        }
 
         /* Modal de edición de etiqueta */
         .etiqueta-edit-overlay {
@@ -1666,19 +1348,10 @@
                 padding: 1.2rem;
             }
 
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .admin-panel {
-                width: 98%;
-                padding: var(--modal-padding);
-            }
 
             /* Mejoras para modales en tablets */
             .etiqueta-edit-modal,
             .section-title-edit-modal,
-            .year-modal,
             .confirm-dialog,
             .mode-modal,
             .login-modal {
@@ -1713,7 +1386,6 @@
         @media (min-height: 600px) and (max-height: 800px) {
             .etiqueta-edit-modal,
             .section-title-edit-modal,
-            .year-modal,
             .confirm-dialog {
                 max-height: 80vh;
                 overflow-y: auto;
@@ -1787,7 +1459,6 @@
                 font-size: 0.85rem;
             }
 
-            .year-modal,
             .etiqueta-edit-modal,
             .section-title-edit-modal,
             .confirm-dialog {
@@ -1813,16 +1484,13 @@
             }
             
             /* Formularios en móviles */
-            .form-group input,
-            .form-row input {
+            .form-group input {
                 padding: 0.75rem;
                 font-size: 16px; /* Prevenir zoom en iOS */
             }
             
             /* Botones de acción más grandes para táctil */
-            button[type="submit"],
-            .btn-add-user,
-            .btn-change-password {
+            button[type="submit"] {
                 min-height: 48px;
                 font-size: 1rem;
             }
@@ -1873,7 +1541,6 @@
         @media (max-height: 500px) and (orientation: landscape) {
             .mode-overlay,
             .login-overlay,
-            .year-modal-overlay,
             .etiqueta-edit-overlay,
             .section-title-edit-overlay,
             .confirm-overlay {
@@ -1882,7 +1549,6 @@
             
             .mode-modal,
             .login-modal,
-            .year-modal,
             .etiqueta-edit-modal,
             .section-title-edit-modal,
             .confirm-dialog {
@@ -1928,11 +1594,10 @@
             .admin-panel-btn,
             .mode-overlay,
             .login-overlay,
-            .year-modal-overlay,
             .etiqueta-edit-overlay,
             .section-title-edit-overlay,
             .confirm-overlay,
-            .backupOverlay {
+            #backupOverlay {
                 display: none !important;
             }
             
@@ -1953,30 +1618,24 @@
         /* WebKit (Chrome, Safari, Edge) */
         .etiqueta-edit-modal::-webkit-scrollbar,
         .section-title-edit-modal::-webkit-scrollbar,
-        .year-modal::-webkit-scrollbar,
         .confirm-dialog::-webkit-scrollbar,
-        #backupsList::-webkit-scrollbar,
-        .admin-panel::-webkit-scrollbar {
+        #backupsList::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
 
         .etiqueta-edit-modal::-webkit-scrollbar-track,
         .section-title-edit-modal::-webkit-scrollbar-track,
-        .year-modal::-webkit-scrollbar-track,
         .confirm-dialog::-webkit-scrollbar-track,
-        #backupsList::-webkit-scrollbar-track,
-        .admin-panel::-webkit-scrollbar-track {
+        #backupsList::-webkit-scrollbar-track {
             background: #f1f1f1;
             border-radius: 4px;
         }
 
         .etiqueta-edit-modal::-webkit-scrollbar-thumb,
         .section-title-edit-modal::-webkit-scrollbar-thumb,
-        .year-modal::-webkit-scrollbar-thumb,
         .confirm-dialog::-webkit-scrollbar-thumb,
-        #backupsList::-webkit-scrollbar-thumb,
-        .admin-panel::-webkit-scrollbar-thumb {
+        #backupsList::-webkit-scrollbar-thumb {
             background: linear-gradient(180deg, var(--secondary-color), var(--primary-color));
             border-radius: 4px;
             border: 2px solid #f1f1f1;
@@ -1984,20 +1643,16 @@
 
         .etiqueta-edit-modal::-webkit-scrollbar-thumb:hover,
         .section-title-edit-modal::-webkit-scrollbar-thumb:hover,
-        .year-modal::-webkit-scrollbar-thumb:hover,
         .confirm-dialog::-webkit-scrollbar-thumb:hover,
-        #backupsList::-webkit-scrollbar-thumb:hover,
-        .admin-panel::-webkit-scrollbar-thumb:hover {
+        #backupsList::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(180deg, var(--primary-color), var(--dark-color));
         }
         
         /* Firefox */
         .etiqueta-edit-modal,
         .section-title-edit-modal,
-        .year-modal,
         .confirm-dialog,
-        #backupsList,
-        .admin-panel {
+        #backupsList {
             scrollbar-width: thin;
             scrollbar-color: var(--secondary-color) #f1f1f1;
         }
@@ -2703,7 +2358,7 @@
     </div>
     
     <footer>
-        <p id="footerText" title="Click para editar (admin)">2025 - Ángel Millán León</p>
+        <p id="footerText" title="Click para editar (admin)">{year} - Ángel Millán León</p>
     </footer>
 
     <script>
@@ -2748,7 +2403,7 @@
         let accessMode = null;
         let appContent = {
             title: 'Plan de Centro - IES Virgen de Villadiego',
-            footer: '2025 - Ángel Millán León',
+            footer: '{year} - Ángel Millán León',
             sections: {
                 'proyecto-educativo': { title: 'Proyecto Educativo' },
                 'reglamento-organizacion': { title: 'Reglamento de Organización y Funcionamiento' },
@@ -2888,63 +2543,6 @@
             }
         }
 
-        // Obtener lista de usuarios
-        async function loadUsers() {
-            try {
-                const snapshot = await database.ref('users').once('value');
-                const users = [];
-                if (snapshot.exists()) {
-                    snapshot.forEach(childSnapshot => {
-                        users.push({
-                            username: childSnapshot.key,
-                            ...childSnapshot.val()
-                        });
-                    });
-                }
-                return users;
-            } catch (error) {
-                console.error('Error cargando usuarios:', error);
-                return [];
-            }
-        }
-
-        // Añadir usuario
-        async function addUser(username, password, email = '') {
-            try {
-                await database.ref(`users/${username}`).set({
-                    password: password,
-                    email: email,
-                    createdAt: Date.now(),
-                    role: 'admin'
-                });
-                return { success: true };
-            } catch (error) {
-                console.error('Error añadiendo usuario:', error);
-                return { success: false, error: error.message };
-            }
-        }
-
-        // Eliminar usuario
-        async function deleteUser(username) {
-            try {
-                await database.ref(`users/${username}`).remove();
-                return { success: true };
-            } catch (error) {
-                console.error('Error eliminando usuario:', error);
-                return { success: false, error: error.message };
-            }
-        }
-
-        // Actualizar contraseña de usuario
-        async function updateUserPassword(username, newPassword) {
-            try {
-                await database.ref(`users/${username}/password`).set(newPassword);
-                return { success: true };
-            } catch (error) {
-                console.error('Error actualizando contraseña:', error);
-                return { success: false, error: error.message };
-            }
-        }
 
         // ============================================
         // FUNCIONES DE UI
@@ -2961,21 +2559,19 @@
 
         // Actualizar visualización del contenido
         function updateContentDisplay() {
-            document.getElementById('appTitle').textContent = appContent.title;
-            document.getElementById('footerText').textContent = appContent.footer.replace('{year}', currentYear.start);
+            const appTitleEl = document.getElementById('appTitle');
+            if (appTitleEl) appTitleEl.textContent = appContent.title;
+            const footerTextEl = document.getElementById('footerText');
+            if (footerTextEl) footerTextEl.textContent = appContent.footer.replace('{year}', currentYear.start);
 
-            // Actualizar títulos de secciones
+            // Actualizar títulos de secciones y pestañas
             for (let seccion in appContent.sections) {
+                const sectionData = appContent.sections[seccion];
+                if (!sectionData || !sectionData.title) continue;
                 const titleEl = document.getElementById(`title-${seccion}`);
-                if (titleEl && appContent.sections[seccion].title) {
-                    titleEl.textContent = appContent.sections[seccion].title;
-                }
-
-                // Actualizar tabs
+                if (titleEl) titleEl.textContent = sectionData.title;
                 const tabEl = document.getElementById(`tab-${seccion}`);
-                if (tabEl && appContent.sections[seccion].title) {
-                    tabEl.textContent = appContent.sections[seccion].title;
-                }
+                if (tabEl) tabEl.textContent = sectionData.title;
             }
         }
 
