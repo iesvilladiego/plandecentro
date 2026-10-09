@@ -1,7 +1,7 @@
 // Agrega al inicio del archivo sw.js
 const API_URL = 'https://iesvilladiego.github.io/plandecentro/';
 
-const CACHE_NAME = 'plan-de-centro-v2.6.0';
+const CACHE_NAME = 'plan-de-centro-v2.5.1';
 
 // Versión "viva" de la app: se extrae de CACHE_NAME.
 // Ej.: 'plan-de-centro-v2.5.1' -> 'v2.5.1'
@@ -46,14 +46,16 @@ self.addEventListener('activate', event => {
           version: APP_VERSION
         });
       });
+      // Verificamos si hay nueva versión disponible nada más activar.
+      checkForUpdates();
     })
   );
 });
 
-// Responder a peticiones de versión desde la página
+// Responder a mensajes desde la página
 self.addEventListener('message', event => {
   const data = event.data || {};
-  // Soportamos tanto { action: 'GET_VERSION' } como { type: 'GET_VERSION' }
+  // GET_VERSION: la página quiere saber nuestra versión.
   if (data.action === 'GET_VERSION' || data.type === 'GET_VERSION') {
     if (event.source) {
       event.source.postMessage({
@@ -61,6 +63,10 @@ self.addEventListener('message', event => {
         version: APP_VERSION
       });
     }
+  }
+  // SKIP_WAITING: la página quiere que activemos el SW nuevo ya.
+  if (data.action === 'SKIP_WAITING' || data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
   }
 });
 
@@ -77,21 +83,28 @@ self.addEventListener('fetch', event => {
 });
 
 // Función para verificar actualizaciones
+// Compara CACHE_NAME del sw.js servido contra la versión actual.
+// Si son distintas, notifica a todas las pestañas con la nueva versión.
 async function checkForUpdates() {
   try {
-    const response = await fetch(API_URL);
+    // Hacemos fetch de sw.js en red, sin pasar por caché.
+    const cacheBuster = 'sw.js?t=' + Date.now();
+    const response = await fetch(cacheBuster, { cache: 'no-store' });
+    if (!response.ok) return;
     const text = await response.text();
-    
-    // Aquí puedes implementar lógica para detectar cambios
-    // Por ejemplo, comparar versiones o fechas de modificación
-    
-    // Notificar a la app sobre nueva versión
-    self.clients.matchAll().then(clients => {
-      clients.forEach(client => {
-        client.postMessage({
-          type: 'NEW_VERSION_FOUND',
-          worker: self
-        });
+    // Extrae CACHE_NAME = 'plan-de-centro-vX.Y.Z';
+    const match = text.match(/CACHE_NAME\s*=\s*['"]plan-de-centro-(v[\d.]+)['"]/);
+    if (!match || !match[1]) return;
+    const remoteVersion = match[1];
+    if (remoteVersion === APP_VERSION) return; // misma versión, nada que hacer
+
+    // Hay una nueva versión: notificamos a todas las pestañas.
+    const clients = await self.clients.matchAll({ includeUncontrolled: true });
+    clients.forEach(client => {
+      client.postMessage({
+        type: 'NEW_VERSION_FOUND',
+        currentVersion: APP_VERSION,
+        newVersion: remoteVersion
       });
     });
   } catch (error) {
@@ -100,4 +113,4 @@ async function checkForUpdates() {
 }
 
 // Verificar actualizaciones periódicamente
-setInterval(checkForUpdates, 24 * 60 * 60 * 1000); // Cada 24 horas
+setInterval(checkForUpdates, 60 * 60 * 1000); // Cada 1 hora (más sensible que 24h)
