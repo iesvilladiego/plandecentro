@@ -1,6 +1,6 @@
 // sw.js - Service Worker de la PWA Plan de Centro
 
-const CACHE_NAME = 'plan-de-centro-v2.5.1';
+const CACHE_NAME = 'plan-de-centro-v2.7.0';
 
 // Versión "viva" de la app: se extrae de CACHE_NAME.
 // Ej.: 'plan-de-centro-v2.5.1' -> 'v2.5.1'
