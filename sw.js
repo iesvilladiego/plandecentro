@@ -35,7 +35,7 @@ self.addEventListener('activate', event => {
           }
         })
       );
-    }).then(() => self.clients.claim()).then(() => {
+    }).then(() => {
       // Nada más activarse, comunicamos a todas las páginas controladas
       // la versión viva de la app.
       return self.clients.matchAll({ includeUncontrolled: true });
