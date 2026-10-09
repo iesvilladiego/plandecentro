@@ -231,35 +231,35 @@
         .user-info {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.35rem;
             background-color: rgba(255, 255, 255, 0.15);
-            padding: clamp(0.4rem, 1vw, 0.6rem) clamp(0.6rem, 2vw, 1rem);
-            border-radius: 25px;
-            font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+            padding: clamp(0.25rem, 0.6vw, 0.4rem) clamp(0.4rem, 1.2vw, 0.65rem);
+            border-radius: 999px;
+            font-size: clamp(0.7rem, 1.2vw, 0.82rem);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
         }
 
         .user-avatar {
-            width: clamp(28px, 4vw, 36px);
-            height: clamp(28px, 4vw, 36px);
+            width: clamp(22px, 3vw, 28px);
+            height: clamp(22px, 3vw, 28px);
             background-color: rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+            font-size: clamp(0.62rem, 1.1vw, 0.75rem);
             flex-shrink: 0;
         }
 
         .user-role-badge {
-            font-size: clamp(0.65rem, 1.2vw, 0.8rem);
-            padding: 0.2rem 0.6rem;
-            border-radius: 10px;
+            font-size: clamp(0.58rem, 1vw, 0.68rem);
+            padding: 0.1rem 0.45rem;
+            border-radius: 999px;
             background-color: rgba(255, 255, 255, 0.25);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.4px;
             white-space: nowrap;
         }
 
@@ -1751,8 +1751,9 @@
             }
             
             .user-info {
-                padding: 0.35rem 0.7rem;
-                font-size: 0.75rem;
+                padding: 0.2rem 0.5rem;
+                font-size: 0.68rem;
+                gap: 0.25rem;
             }
             
             .logout-btn,
@@ -1862,9 +1863,9 @@
             }
             
             .user-avatar {
-                width: 30px;
-                height: 30px;
-                font-size: 0.7rem;
+                width: 24px;
+                height: 24px;
+                font-size: 0.62rem;
             }
         }
 
@@ -2644,10 +2645,8 @@
                 <span id="userName">Usuario</span>
                 <span class="user-role-badge" id="userRole">Rol</span>
             </div>
-                    <button type="button" class="install-btn" id="installBtn" title="Instalar como aplicación" aria-label="Instalar como aplicación">
-            ⬇️ Instalar
-        </button>
-        <button type="button" class="help-btn" id="helpBtn" title="Ayuda contextual" aria-label="Ayuda contextual">?</button>
+            <button type="button" class="install-btn" id="installBtn" title="Instalar como aplicación" aria-label="Instalar como aplicación">⬇️ Instalar</button>
+            <button type="button" class="help-btn" id="helpBtn" title="Ayuda contextual" aria-label="Ayuda contextual">?</button>
             <button type="button" class="admin-panel-btn" id="backupBtn" style="display: none;" title="Copias de Seguridad" aria-label="Copias de seguridad">💾 Backup</button>
             <button type="button" class="logout-btn" id="logoutBtn" aria-label="Cerrar sesión">Cerrar Sesión</button>
         </div>
@@ -3824,7 +3823,7 @@
         // VERSIÓN VIVA DE LA APP + INDICADOR DE ACTUALIZACIÓN
         // ============================================
         let currentAppVersion = null;
-        let pendingNewVersion = null;
+        let userRequestedUpdate = false;  // Bug D: auto-activar SW si el usuario ya pidió actualizar
 
         function setAppVersion(version) {
             const chip = document.getElementById('versionChip');
@@ -3843,7 +3842,8 @@
         function setUpdateAvailable(newVersion) {
             const chip = document.getElementById('versionChip');
             if (!chip) return;
-            pendingNewVersion = newVersion || null;
+            // Bug C: si ya estaba visible, no volvemos a tostar.
+            const wasAlreadyVisible = chip.classList.contains('update-available');
             chip.classList.add('update-available');
             if (newVersion && currentAppVersion && newVersion !== currentAppVersion) {
                 chip.innerHTML = '<span class="chip-new-version">' + currentAppVersion + '</span>'
@@ -3854,11 +3854,14 @@
                 chip.innerHTML = '<span class="chip-arrow">↑</span> ' + newVersion;
                 chip.title = 'Nueva versión disponible: ' + newVersion + '. Haz clic para actualizar.';
             } else {
+                // Bug B: si no sabemos la versión nueva, mostramos "Actualizar" en el chip.
+                chip.innerHTML = '<span class="chip-arrow">↑</span> Actualizar';
                 chip.title = 'Hay una nueva versión disponible. Haz clic para actualizar.';
             }
             chip.setAttribute('aria-label', chip.title);
-            // Aviso no intrusivo
-            showNotification('⬆️ Nueva versión disponible. Clic en el chip para actualizar.', 'info');
+            if (!wasAlreadyVisible) {
+                showNotification('⬆️ Nueva versión disponible. Clic en el chip para actualizar.', 'info');
+            }
         }
 
         async function triggerUpdate() {
@@ -3873,14 +3876,22 @@
                     // SW nuevo ya instalado y esperando: lo activamos.
                     registration.waiting.postMessage({ action: 'SKIP_WAITING' });
                 } else {
-                    // Forzamos la comprobación de actualizaciones; si hay SW nuevo,
-                    // se instalará y pasará a "waiting", tras lo cual podremos activarlo.
+                    // Bug D: marcamos que el usuario pidió actualizar. Cuando el SW nuevo
+                    // termine de instalarse (statechange -> installed), lo activaremos solo.
+                    userRequestedUpdate = true;
                     await registration.update();
-                    showNotification('⏳ Buscando actualización…', 'info');
+                    // Si tras update() no hay waiting todavía, puede que la instalación
+                    // tarde un poco; el listener updatefound/statechange lo gestionará.
+                    if (registration.waiting) {
+                        registration.waiting.postMessage({ action: 'SKIP_WAITING' });
+                    } else {
+                        showNotification('⏳ Buscando actualización…', 'info');
+                    }
                 }
             } catch (e) {
                 console.error('Error al activar la actualización:', e);
                 showNotification('No se pudo activar la actualización. Recarga la página.', 'error');
+                userRequestedUpdate = false;
             }
         }
 
@@ -3913,6 +3924,11 @@
                     installing.addEventListener('statechange', () => {
                         if (installing.state === 'installed' && navigator.serviceWorker.controller) {
                             setUpdateAvailable(null);
+                            // Bug D: si el usuario ya pidió actualizar, activamos el SW nuevo.
+                            if (userRequestedUpdate && registration.waiting) {
+                                registration.waiting.postMessage({ action: 'SKIP_WAITING' });
+                                userRequestedUpdate = false;
+                            }
                         }
                     });
                 });
