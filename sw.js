@@ -1,7 +1,7 @@
 // Agrega al inicio del archivo sw.js
 const API_URL = 'https://iesvilladiego.github.io/plandecentro/';
 
-const CACHE_NAME = 'plan-de-centro-v2.5.1';
+const CACHE_NAME = 'plan-de-centro-v2.6.0';
 
 // Versión "viva" de la app: se extrae de CACHE_NAME.
 // Ej.: 'plan-de-centro-v2.5.1' -> 'v2.5.1'
