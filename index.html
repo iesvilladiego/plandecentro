@@ -2037,6 +2037,289 @@
             scrollbar-width: thin;
             scrollbar-color: var(--primary-color) transparent;
         }
+
+        /* === Fila de título con chips (versión + curso) === */
+        .title-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: clamp(0.4rem, 1.2vw, 0.8rem);
+            width: 100%;
+        }
+
+        .title-row h1 {
+            margin-bottom: 0;
+        }
+
+        /* Chip de versión "viva" (obtenida del Service Worker) */
+        .app-version-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: clamp(0.18rem, 0.5vw, 0.28rem) clamp(0.5rem, 1.5vw, 0.75rem);
+            border-radius: 999px;
+            background-color: rgba(255, 255, 255, 0.16);
+            color: #fff;
+            font-size: clamp(0.65rem, 1.4vw, 0.78rem);
+            font-weight: 700;
+            border: 1px solid rgba(255, 255, 255, 0.32);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            letter-spacing: 0.4px;
+            white-space: nowrap;
+            line-height: 1.2;
+            cursor: default;
+            text-transform: uppercase;
+        }
+
+        .app-version-chip::before {
+            content: '●';
+            margin-right: 0.35rem;
+            font-size: 0.65em;
+            color: #5ff58a;
+            text-shadow: 0 0 6px rgba(95, 245, 138, 0.85);
+            animation: livePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.45; }
+        }
+
+        /* Chip del curso académico actual */
+        .course-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: clamp(0.2rem, 0.5vw, 0.3rem) clamp(0.6rem, 1.5vw, 0.85rem);
+            border-radius: 999px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: clamp(0.7rem, 1.6vw, 0.88rem);
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            white-space: nowrap;
+            line-height: 1.2;
+        }
+
+        .course-chip .year-text {
+            font-size: inherit;
+            cursor: default;
+        }
+
+        .course-chip .year-text.editable {
+            cursor: pointer;
+        }
+
+        .course-chip .year-text.editable:hover {
+            background-color: transparent;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .course-chip .edit-year-btn {
+            background-color: rgba(255, 255, 255, 0.22);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #fff;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all var(--transition-normal);
+            display: none;
+            line-height: 1;
+        }
+
+        .course-chip .edit-year-btn:hover {
+            background-color: rgba(255, 255, 255, 0.35);
+        }
+
+        .course-chip .edit-year-btn.visible {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .header-content p {
+            margin: 0;
+        }
+
+        /* === Botón de ayuda contextual === */
+        .help-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #fff;
+            width: clamp(32px, 5vw, 38px);
+            height: clamp(32px, 5vw, 38px);
+            min-height: auto;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            font-weight: 700;
+            transition: all var(--transition-normal);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 0;
+        }
+
+        .help-btn:hover {
+            background-color: rgba(255, 255, 255, 0.35);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .help-btn:active {
+            transform: translateY(0);
+        }
+
+        .mode-option {
+            position: relative;
+        }
+
+        .mode-help-btn {
+            position: absolute;
+            top: 0.6rem;
+            right: 0.6rem;
+            background-color: rgba(26, 75, 140, 0.12);
+            border: 1px solid rgba(26, 75, 140, 0.25);
+            color: var(--primary-color);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 700;
+            transition: all var(--transition-normal);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            z-index: 2;
+        }
+
+        .mode-help-btn:hover {
+            background-color: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+            transform: scale(1.08);
+        }
+
+        /* === Modal de ayuda === */
+        .help-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: clamp(1rem, 3vw, 2rem);
+            animation: fadeIn 0.25s ease;
+        }
+
+        .help-overlay.hidden {
+            display: none;
+        }
+
+        .help-modal {
+            background: #fff;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-xl);
+            max-width: 640px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: clamp(1.5rem, 4vw, 2.5rem);
+            animation: scaleIn 0.3s ease;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.94); opacity: 0; }
+            to   { transform: scale(1);    opacity: 1; }
+        }
+
+        .help-modal h3 {
+            color: var(--primary-color);
+            font-size: clamp(1.2rem, 3vw, 1.6rem);
+            margin-bottom: 1rem;
+            text-align: center;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.6rem;
+        }
+
+        .help-modal .help-content {
+            color: var(--dark-color);
+            line-height: 1.7;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        .help-modal .help-content h4 {
+            color: var(--secondary-color);
+            margin-top: 1.2rem;
+            margin-bottom: 0.4rem;
+            font-size: 1.05rem;
+        }
+
+        .help-modal .help-content p {
+            margin-bottom: 0.8rem;
+        }
+
+        .help-modal .help-content ul {
+            margin: 0 0 0.8rem 1.2rem;
+            padding-left: 0.5rem;
+        }
+
+        .help-modal .help-content li {
+            margin-bottom: 0.4rem;
+        }
+
+        .help-modal .help-content kbd {
+            background: #f1f3f5;
+            border: 1px solid #dee2e6;
+            border-bottom-width: 2px;
+            border-radius: 4px;
+            padding: 0.1rem 0.45rem;
+            font-size: 0.85rem;
+            font-family: 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
+            color: var(--dark-color);
+        }
+
+        .help-modal .help-content .help-note {
+            background: #e7f3ff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 0.8rem 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            font-size: 0.92rem;
+            color: #084298;
+        }
+
+        .help-modal .help-content .help-warn {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning-color);
+            padding: 0.8rem 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            font-size: 0.92rem;
+            color: #856404;
+        }
+
+        .help-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
     </style>
 </head>
 <body>
@@ -2049,11 +2332,13 @@
             </div>
             <div class="mode-options">
                 <div class="mode-option direct" id="directAccessBtn">
+                    <button type="button" class="mode-help-btn" id="directHelpBtn" title="Ayuda para Acceso Directo">?</button>
                     <div class="mode-option-icon">👁️</div>
                     <div class="mode-option-title">Acceso Directo</div>
                     <div class="mode-option-desc">Accede inmediatamente al contenido del Plan de Centro en modo solo lectura. No requiere autenticación.</div>
                 </div>
                 <div class="mode-option edit" id="editAccessBtn">
+                    <button type="button" class="mode-help-btn" id="editHelpBtn" title="Ayuda para modo Edición">?</button>
                     <div class="mode-option-icon">✏️</div>
                     <div class="mode-option-title">Edición</div>
                     <div class="mode-option-desc">Accede con permisos de administrador para poder modificar contenidos, gestionar usuarios y cambiar el año escolar.</div>
@@ -2247,17 +2532,30 @@
         </div>
     </div>
 
+    <!-- MODAL DE AYUDA CONTEXTUAL -->
+    <div id="helpOverlay" class="help-overlay hidden">
+        <div class="help-modal">
+            <h3 id="helpTitle">❓ Ayuda</h3>
+            <div class="help-content" id="helpContent"></div>
+            <div class="help-buttons">
+                <button type="button" class="cancel-year-btn" id="closeHelpBtn" style="flex: 1;">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
     <header>
         <div class="header-content">
-            <h1 id="appTitle" title="Click para editar (admin)">Plan de Centro - IES Virgen de Villadiego</h1>
-            <p>
-                <span class="year-display">
+            <div class="title-row">
+                <h1 id="appTitle" title="Click para editar (admin)">Plan de Centro - IES Virgen de Villadiego</h1>
+                <span class="app-version-chip" id="versionChip" title="Versión viva obtenida del Service Worker">v?</span>
+                <span class="course-chip">
                     <span class="year-text" id="yearDisplay">Curso 2025-2026</span>
                     <button type="button" class="edit-year-btn" id="editYearBtn" title="Cambiar año escolar">
                         ✏️ Cambiar año
                     </button>
                 </span>
-            </p>
+            </div>
+            <p style="display: none;"></p>
         </div>
         <div class="user-panel" id="userPanel" style="display: none;">
             <div class="user-info">
@@ -2265,6 +2563,7 @@
                 <span id="userName">Usuario</span>
                 <span class="user-role-badge" id="userRole">Rol</span>
             </div>
+            <button type="button" class="help-btn" id="helpBtn" title="Ayuda contextual">?</button>
             <button type="button" class="admin-panel-btn" id="backupBtn" style="display: none;" title="Copias de Seguridad">💾 Backup</button>
             <button type="button" class="logout-btn" id="logoutBtn">Cerrar Sesión</button>
         </div>
@@ -2347,7 +2646,22 @@
         // ESTADO DE LA APLICACIÓN
         // ============================================
         let currentUser = null;
-        let currentYear = { start: 2025, end: 2026 };
+        // Calcula el curso académico actual según la fecha del sistema:
+        // un curso empieza el 1 de septiembre y acaba el 31 de agosto del año siguiente.
+        function getCurrentAcademicYear() {
+            const now = new Date();
+            const y = now.getFullYear();
+            // getMonth() es 0-index: 0 = enero, 8 = septiembre
+            if (now.getMonth() >= 8) {
+                // Septiembre–Diciembre: curso y / y+1
+                return { start: y, end: y + 1 };
+            } else {
+                // Enero–Agosto: curso (y-1) / y
+                return { start: y - 1, end: y };
+            }
+        }
+        
+        let currentYear = getCurrentAcademicYear();
         let accessMode = null;
         let appContent = {
             title: 'Plan de Centro - IES Virgen de Villadiego',
@@ -2417,13 +2731,11 @@
 
         // Cargar datos desde Firebase
         function loadFromFirebase() {
-            // Cargar año
-            database.ref('config/year').once('value').then(snapshot => {
-                if (snapshot.exists()) {
-                    currentYear = snapshot.val();
-                    updateYearDisplay();
-                }
-            });
+            // Año: se calcula automáticamente (1 sept – 31 ago).
+            // No se carga desde Firebase para que siempre refleje la fecha actual.
+            // Persistimos en Firebase únicamente para sincronizar entre dispositivos.
+            database.ref('config/year').set(currentYear);
+            updateYearDisplay();
 
             // Cargar contenido
             database.ref('config/content').once('value').then(snapshot => {
@@ -3292,10 +3604,12 @@
             if (startYear >= 2000 && startYear <= 2099) {
                 currentYear.start = startYear;
                 currentYear.end = startYear + 1;
+                // Persistimos por consistencia, pero al recargar se vuelve
+                // a calcular automáticamente según la fecha del sistema.
                 saveYearToFirebase();
                 updateYearDisplay();
                 hideYearModal();
-                alert('✓ Año escolar actualizado correctamente');
+                showNotification('✓ Año escolar actualizado. Se recuperará automáticamente al recargar.', 'success');
             } else {
                 alert('Por favor, introduce un año válido (entre 2000 y 2099)');
             }
@@ -3497,6 +3811,126 @@
 
             // Generar botones iniciales
             generarBotonesApartados();
+        });
+        // ============================================
+        // VERSIÓN VIVA DE LA APP (obtenida del SW)
+        // ============================================
+        function setAppVersion(version) {
+            const chip = document.getElementById('versionChip');
+            if (!chip) return;
+            const v = (version || '').trim();
+            chip.textContent = v ? v : 'v?';
+            chip.title = v
+                ? ('Versión actual: ' + v + ' (obtenida del Service Worker)')
+                : 'No se pudo obtener la versión del Service Worker';
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.addEventListener('message', event => {
+                if (event.data && event.data.type === 'VERSION_INFO' && event.data.version) {
+                    setAppVersion(event.data.version);
+                }
+            });
+
+            if (navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage({ action: 'GET_VERSION' });
+            }
+        }
+
+        async function loadAppVersionFromFetch() {
+            try {
+                const response = await fetch('sw.js', { cache: 'no-store' });
+                if (!response.ok) return;
+                const text = await response.text();
+                const match = text.match(/CACHE_NAME\s*=\s*['\"][^'\"]*?(v[\d.]+)['\"]/);
+                if (match && match[1]) {
+                    setAppVersion(match[1]);
+                }
+            } catch (e) {
+                console.warn('No se pudo cargar la versión desde sw.js:', e);
+            }
+        }
+
+        setTimeout(loadAppVersionFromFetch, 1500);
+
+        // ============================================
+        // AYUDA CONTEXTUAL POR PERFIL
+        // ============================================
+        const HELP_CONTENT = {
+            direct: {
+                title: '👁️ Ayuda - Acceso Directo',
+                body: '<p>Estás usando la aplicación en <strong>modo solo lectura</strong>. ' +
+                    'Puedes navegar por todas las secciones del Plan de Centro y abrir los documentos publicados, ' +
+                    'pero no puedes editarlos.</p>' +
+                    '<h4>¿Qué puedes hacer?</h4>' +
+                    '<ul>' +
+                    '<li>Pulsa las pestañas superiores para cambiar de sección (Proyecto Educativo, Reglamento, etc.).</li>' +
+                    '<li>Haz clic en cualquier apartado para abrir el documento publicado en una nueva pestaña.</li>' +
+                    '<li>El <em>curso actual</em> se muestra junto al título y se ajusta solo al pasar de agosto a septiembre.</li>' +
+                    '</ul>' +
+                    '<h4>¿Quieres editar el contenido?</h4>' +
+                    '<p>Cierra sesión (si la hubiera) y elige <strong>Edición</strong> en la pantalla de selección de modo. ' +
+                    'Necesitarás credenciales de administrador.</p>' +
+                    '<div class="help-note"><strong>💡 Consejo:</strong> El chip verde junto al título muestra la versión viva ' +
+                    'de la aplicación, obtenida del Service Worker. Si la versión cambia, recarga la página para obtenerla.</div>'
+            },
+            admin: {
+                title: '✏️ Ayuda - Modo Edición',
+                body: '<p>Estás usando la aplicación como <strong>administrador</strong>. ' +
+                    'Tienes control total sobre el contenido del Plan de Centro.</p>' +
+                    '<h4>Acciones disponibles</h4>' +
+                    '<ul>' +
+                    '<li><strong>Editar etiquetas:</strong> haz clic en cualquier apartado para modificar su código, nombre o enlace.</li>' +
+                    '<li><strong>Añadir etiquetas:</strong> usa el botón <kbd>+</kbd> al final de cada sección.</li>' +
+                    '<li><strong>Eliminar etiquetas:</strong> pulsa el <kbd>×</kbd> en la esquina de cada apartado.</li>' +
+                    '<li><strong>Editar títulos:</strong> haz clic en el título de la app o de cualquier sección para renombrarla.</li>' +
+                    '<li><strong>Cambiar curso:</strong> usa <kbd>✏️ Cambiar año</kbd> dentro del chip del curso. ' +
+                    'El cambio es <em>temporal</em>: al recargar, la app recalcula el curso actual (1 sept – 31 ago).</li>' +
+                    '<li><strong>Copias de seguridad:</strong> con <kbd>💾 Backup</kbd> puedes crear y restaurar snapshots.</li>' +
+                    '</ul>' +
+                    '<div class="help-warn"><strong>⚠️ Cuidado:</strong> restaurar una copia de seguridad reemplaza TODOS los ' +
+                    'datos actuales. Crea un backup antes de hacer cambios importantes.</div>' +
+                    '<div class="help-note"><strong>💡 Consejo:</strong> el chip verde del título muestra la versión viva ' +
+                    'obtenida del Service Worker. Para publicar una nueva versión, actualiza <code>CACHE_NAME</code> en <code>sw.js</code>.</div>'
+            }
+        };
+
+        function showHelp(profile) {
+            const help = HELP_CONTENT[profile] || HELP_CONTENT.direct;
+            document.getElementById('helpTitle').textContent = help.title;
+            document.getElementById('helpContent').innerHTML = help.body;
+            document.getElementById('helpOverlay').classList.remove('hidden');
+        }
+
+        function closeHelp() {
+            document.getElementById('helpOverlay').classList.add('hidden');
+        }
+
+        document.getElementById('helpBtn').addEventListener('click', function() {
+            const profile = (currentUser && currentUser.role === 'admin') ? 'admin' : 'direct';
+            showHelp(profile);
+        });
+
+        document.getElementById('directHelpBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            showHelp('direct');
+        });
+        document.getElementById('editHelpBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            showHelp('admin');
+        });
+
+        document.getElementById('closeHelpBtn').addEventListener('click', closeHelp);
+        document.getElementById('helpOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeHelp();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (!document.getElementById('helpOverlay').classList.contains('hidden')) {
+                    closeHelp();
+                }
+            }
         });
     </script>
                 <script>
