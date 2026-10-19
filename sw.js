@@ -1,15 +1,15 @@
 // sw.js - Service Worker de la PWA Plan de Centro
 
-const CACHE_NAME = 'plan-de-centro-v2.7.0';
+const CACHE_NAME = 'plan-de-centro-v2.7.1';
 
 // Versión "viva" de la app: se extrae de CACHE_NAME.
 // Ej.: 'plan-de-centro-v2.5.1' -> 'v2.5.1'
 const APP_VERSION = CACHE_NAME.replace(/^plan-de-centro-/, '');
 
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
+  './',
+  './index.html',
+  './manifest.json',
   // Agrega aquí otros recursos si los tienes (CSS, JS, imágenes)
 ];
 
@@ -29,7 +29,9 @@ self.addEventListener('activate', event => {
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
+          // Solo borrar cachés propias (familia 'plan-de-centro-'): nunca las
+          // del portal (portal-ies-*) ni de otras PWAs del mismo origen.
+          if (cacheName !== CACHE_NAME && cacheName.startsWith('plan-de-centro-')) {
             return caches.delete(cacheName);
           }
         })
